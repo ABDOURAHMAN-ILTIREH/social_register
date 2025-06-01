@@ -1,21 +1,19 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
-  Home, Users, Settings, Map, Building2, UserCheck, 
+  Home, Users, Map, Building2, UserCheck, 
   Calendar, MapPin, Phone, ChevronLeft, ChevronRight,
   ChevronsLeft, ChevronsRight
 } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
-import { useUi } from '../contexts/UiContext';
 import StatCard from '../components/StatCard';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25, 50];
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
+ 
   const { menages, personnes } = useData();
-  const { searchQuery } = useUi();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   

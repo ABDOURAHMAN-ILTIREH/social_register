@@ -18,9 +18,12 @@ const HouseholdDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
  const { isAdmin } = useAuth();
   const [menageData, setMenageData] = useState<{
-    membres: any; menage: Menage; members: Personne[] 
+    menage: Menage;
+    membres: any; // optional, or better typed
+    members: Personne[];
 } | null>(null);
-  
+
+
   const navigate = useNavigate();
   const {getHouseholdMembers, logements, equipements, deleteMenage } = useData();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -31,8 +34,13 @@ const HouseholdDetails: React.FC = () => {
       try {
         const numericId = String(id);
         const response = await getHouseholdMembers(numericId);
-        const data = response.members;
-        setMenageData(data);
+        console.log(response)
+       setMenageData({
+        menage: response.menage,
+        membres: null, // or response.membres if exists
+        members: response.members  // ✅ correct nesting
+      });
+
       } catch (err) {
         throw err
       }
@@ -346,7 +354,7 @@ const HouseholdDetails: React.FC = () => {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {menageData?.members.map((personne: { id: React.Key | null | undefined; nom_prenoms: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; sexe: string; age: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; lien_parental: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; etat_matrimonial: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; statut_occupation: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; activite_principale: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; }) =>(
+                          {menageData?.members.map((personne:Personne) =>(
                             <tr key={personne.id} className="hover:bg-gray-50">
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">

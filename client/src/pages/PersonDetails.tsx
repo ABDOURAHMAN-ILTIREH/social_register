@@ -14,7 +14,7 @@ import { useAuth } from '../contexts/AuthContext';
 const PersonDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { getPerson, deletePersonne } = useData();
+  const {deletePersonne } = useData();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [person, setPerson] = useState<Personne | null>(null);
   const [household, setMenages] = useState<Menage | null>(null);
@@ -61,7 +61,7 @@ const PersonDetails: React.FC = () => {
   <div className="flex items-center py-3 border-b border-gray-100">
     {Icon && (
       <div className="mr-3 p-2 bg-gray-50 rounded-full">
-        <Icon  className="text-gray-500" size={18}/>
+        <Icon size={18}/>
       </div>
     )}
     <div className="flex-1 flex items-baseline">
@@ -73,7 +73,7 @@ const PersonDetails: React.FC = () => {
 
   const SectionHeader = ({ title, icon: Icon }: { title: string, icon: React.ComponentType<{ size?: number }> }) => (
     <div className="flex items-center mt-6 mb-4">
-      <Icon className="text-gray-500 mr-2" size={20} />
+      <Icon size={20} />
       <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
     </div>
   );

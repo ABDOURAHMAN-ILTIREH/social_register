@@ -104,11 +104,10 @@ export interface Entretien {
 
 export interface Users {
   id:number,
-  name:String,
-  email:String,
-  password:String,
-  role:String,
-  newPassword: string;
+  name:string,
+  email:string,
+  password:string,
+  role:string,
 }
 
 

@@ -13,7 +13,7 @@ import { useUi } from '../contexts/UiContext';
 import { useAuth } from '../contexts/AuthContext';
 
 const Sidebar: React.FC = () => {
-  const { sidebarOpen, toggleSidebar, setActiveTab } = useUi();
+  const { sidebarOpen, setActiveTab } = useUi();
   const { isAdmin } = useAuth();
   
   const sidebarVariants = {

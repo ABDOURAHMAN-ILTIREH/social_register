@@ -117,11 +117,7 @@ exports.getMenageWithMembers = async (req, res) => {
       attributes: { exclude: ['password'] } // Exclure les champs sensibles s'il y en a
     });
 
-    res.status(200).json({
-      success: true,
-      menage,
-      members
-    });
+    res.status(200).json(members);
     
   } catch (error) {
     console.error(error);

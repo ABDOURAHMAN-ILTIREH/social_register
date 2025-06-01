@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, MessageCircle } from 'lucide-react';
 import { useData } from '../contexts/DataContext';

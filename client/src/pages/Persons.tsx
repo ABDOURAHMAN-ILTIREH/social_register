@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
-  Search, User, Calendar, FileText, Home, 
+  Search, User, Calendar, FileText, 
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
   Filter, X, Loader2
 } from 'lucide-react';
-import { useData } from '../contexts/DataContext';
+
 
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25, 50];
@@ -29,15 +29,8 @@ interface Person {
   menage_id: number;
 }
 
-interface Menage {
-  id: number;
-  commune_residence: string;
-  quartier: string;
-}
-
 const Persons: React.FC = () => {
   const [personnes, setPersons] = useState<Person[]>([]);
-  const [menages, setMenages] = useState<Menage[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');

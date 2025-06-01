@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users as UsersIcon, Search, Shield, Mail, Calendar, UserCheck, Trash, Edit, X } from 'lucide-react';
+import { Users as UsersIcon, Search, Shield, Mail, UserCheck, Trash, Edit, X } from 'lucide-react';
 import { useData } from '../contexts/DataContext';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 
@@ -20,7 +20,7 @@ const Users: React.FC = () => {
      role: "",
   });
 
-  const handleEdit = (users: {id: number; name:string,email:string,role:string,password: string; newPassword: string 
+  const handleEdit = (users: {id: number; name:string,email:string,role:string,password: string;
 }) => {
     setEditingId(users.id);
     setFormData({
@@ -60,10 +60,13 @@ const Users: React.FC = () => {
       e.preventDefault();
       setError(null);
       try {
-        await updateUsers({
-          id: editingId,
-          ...formData,
-        });
+       if (editingId !== null) {
+              await updateUsers({
+                id: editingId,
+                ...formData,
+                password: '',
+              });
+            }
 
         setShowForm(false);
         setFormData({  name:'',email:'',role:''});
@@ -86,7 +89,7 @@ const Users: React.FC = () => {
     }
   };
 
-  const filteredUsers = users.filter((user: { name: string; email: string ;role:String}) => {
+  const filteredUsers = users.filter((user: { name: string; email: string ;role:string}) => {
   const query = searchQuery.toLowerCase().trim();
   return (
     user.name.toLowerCase().includes(query) ||

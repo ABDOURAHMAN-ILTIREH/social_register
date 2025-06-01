@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, LogOut, Menu, Download } from 'lucide-react';
+import { Search, LogOut, Menu } from 'lucide-react';
 import { useUi } from '../contexts/UiContext';
 import { useAuth } from '../contexts/AuthContext';
 
