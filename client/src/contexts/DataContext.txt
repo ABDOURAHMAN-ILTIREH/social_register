@@ -1,0 +1,229 @@
+import React, { createContext, useState, useContext } from 'react';
+import { 
+  menagesData, 
+  logementsData, 
+  equipementsData, 
+  personnesData, 
+  plaintesData, 
+  enqueteursData, 
+  entretiensData 
+} from '../data/fakeData';
+import type { Menage, Logement, Equipement, Personne, Plainte, Enqueteur, Entretien } from '../types/database';
+
+interface DataContextType {
+  menages: Menage[];
+  logements: Logement[];
+  equipements: Equipement[];
+  personnes: Personne[];
+  plaintes: Plainte[];
+  enqueteurs: Enqueteur[];
+  entretiens: Entretien[];
+  addMenage: (menage: Omit<Menage, 'id'>) => Promise<number>;
+  addLogement: (logement: Omit<Logement, 'id'>) => Promise<number>;
+  addEquipement: (equipement: Omit<Equipement, 'id'>) => Promise<number>;
+  updateMenage: (menage: Menage) => Promise<void>;
+  deleteMenage: (id: number) => Promise<void>;
+  addPersonne: (personne: Omit<Personne, 'id' | 'age'>) => Promise<number>;
+  updatePersonne: (personne: Personne) => Promise<void>;
+  deletePersonne: (id: number) => Promise<void>;
+  addPlainte: (plainte: Omit<Plainte, 'id'>) => void;
+  updatePlainte: (plainte: Plainte) => void;
+  deletePlainte: (id: number) => void;
+  getHousehold: (id: string) => Menage | undefined;
+  getHouseholdMembers: (id: string) => Personne[];
+  getPerson: (id: string) => Personne | undefined;
+  loading: boolean;
+  error: string | null;
+}
+
+const DataContext = createContext<DataContextType | undefined>(undefined);
+
+export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [menages, setMenages] = useState<Menage[]>(menagesData);
+  const [logements, setLogements] = useState<Logement[]>(logementsData);
+  const [equipements, setEquipements] = useState<Equipement[]>(equipementsData);
+  const [personnes, setPersonnes] = useState<Personne[]>(personnesData);
+  const [plaintes, setPlaintes] = useState<Plainte[]>(plaintesData);
+  const [enqueteurs, setEnqueteurs] = useState<Enqueteur[]>(enqueteursData);
+  const [entretiens, setEntretiens] = useState<Entretien[]>(entretiensData);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const calculateAge = (birthDate: string): number => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  const addMenage = async (menage: Omit<Menage, 'id'>): Promise<number> => {
+    setLoading(true);
+    try {
+      const id = Date.now();
+      const newMenage = { ...menage, id };
+      setMenages(prev => [...prev, newMenage]);
+      return id;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addLogement = async (logement: Omit<Logement, 'id'>): Promise<number> => {
+    setLoading(true);
+    try {
+      const id = Date.now();
+      const newLogement = { ...logement, id };
+      setLogements(prev => [...prev, newLogement]);
+      return id;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addEquipement = async (equipement: Omit<Equipement, 'id'>): Promise<number> => {
+    setLoading(true);
+    try {
+      const id = Date.now();
+      const newEquipement = { ...equipement, id };
+      setEquipements(prev => [...prev, newEquipement]);
+      return id;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateMenage = async (updatedMenage: Menage): Promise<void> => {
+    setLoading(true);
+    try {
+      setMenages(prev => 
+        prev.map(menage => menage.id === updatedMenage.id ? updatedMenage : menage)
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteMenage = async (id: number): Promise<void> => {
+    setLoading(true);
+    try {
+      // Delete related records first
+      setLogements(prev => prev.filter(item => item.menage_id !== id));
+      setEquipements(prev => prev.filter(item => item.menage_id !== id));
+      setPersonnes(prev => prev.filter(item => item.menage_id !== id));
+      setPlaintes(prev => prev.filter(item => item.menage_id !== id));
+      setEntretiens(prev => prev.filter(item => item.menage_id !== id));
+      
+      // Finally delete the household
+      setMenages(prev => prev.filter(menage => menage.id !== id));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addPersonne = async (personne: Omit<Personne, 'id' | 'age'>): Promise<number> => {
+    setLoading(true);
+    try {
+      const id = Date.now();
+      const age = calculateAge(personne.date_naissance);
+      const newPersonne = { ...personne, id, age };
+      setPersonnes(prev => [...prev, newPersonne]);
+      return id;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updatePersonne = async (updatedPersonne: Personne): Promise<void> => {
+    setLoading(true);
+    try {
+      setPersonnes(prev => 
+        prev.map(personne => personne.id === updatedPersonne.id ? updatedPersonne : personne)
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deletePersonne = async (id: number): Promise<void> => {
+    setLoading(true);
+    try {
+      setPersonnes(prev => prev.filter(personne => personne.id !== id));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addPlainte = (plainte: Omit<Plainte, 'id'>) => {
+    const newPlainte = {
+      ...plainte,
+      id: Date.now()
+    };
+    setPlaintes([...plaintes, newPlainte]);
+  };
+
+  const updatePlainte = (updatedPlainte: Plainte) => {
+    setPlaintes(plaintes.map(plainte => 
+      plainte.id === updatedPlainte.id ? updatedPlainte : plainte
+    ));
+  };
+
+  const deletePlainte = (id: number) => {
+    setPlaintes(plaintes.filter(plainte => plainte.id !== id));
+  };
+
+  const getHousehold = (id: string): Menage | undefined => {
+    return menages.find(menage => menage.id === parseInt(id));
+  };
+
+  const getHouseholdMembers = (id: string): Personne[] => {
+    return personnes.filter(personne => personne.menage_id === parseInt(id));
+  };
+
+  const getPerson = (id: string): Personne | undefined => {
+    return personnes.find(personne => personne.id === parseInt(id));
+  };
+
+  return (
+    <DataContext.Provider
+      value={{
+        menages,
+        logements,
+        equipements,
+        personnes,
+        plaintes,
+        enqueteurs,
+        entretiens,
+        addMenage,
+        addLogement,
+        addEquipement,
+        updateMenage,
+        deleteMenage,
+        addPersonne,
+        updatePersonne,
+        deletePersonne,
+        addPlainte,
+        updatePlainte,
+        deletePlainte,
+        getHousehold,
+        getHouseholdMembers,
+        getPerson,
+        loading,
+        error
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
+};
+
+export const useData = () => {
+  const context = useContext(DataContext);
+  if (context === undefined) {
+    throw new Error('useData must be used within a DataProvider');
+  }
+  return context;
+};
