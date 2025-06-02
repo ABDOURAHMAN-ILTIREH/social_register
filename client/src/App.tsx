@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import {AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
@@ -24,7 +24,7 @@ import ResetPasswordForm from './pages/ResetPasswordForm';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <AuthProvider>
         <DataProvider>
           <UiProvider>
@@ -35,7 +35,7 @@ function App() {
                 <Route path="forgot-password" element={<ForgotPassword />} />
                 <Route path="reset-password/:token" element={<ResetPasswordForm />} />
                 <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                  <Route index element={<Navigate to="/dashboard\" replace />} />
+                  <Route index element={<Navigate to="/dashboard" replace />} />
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="households" element={<Households />} />
                   <Route path="households/new" element={<ProtectedRoute requireAdmin={true}><NewHousehold /></ProtectedRoute>} />
@@ -54,7 +54,7 @@ function App() {
           </UiProvider>
         </DataProvider>
       </AuthProvider>
-    </Router>
+    </BrowserRouter>
   );
 }
 

@@ -34,7 +34,7 @@ const HouseholdDetails: React.FC = () => {
       try {
         const numericId = String(id);
         const response = await getHouseholdMembers(numericId);
-        console.log(response)
+
        setMenageData({
         menage: response.menage,
         membres: null, // or response.membres if exists

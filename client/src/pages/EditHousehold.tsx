@@ -110,7 +110,6 @@ console.log(householdData);
           });
           setSelectedEnqueteur(menage.enqueteur_id);
         }
-        console.log(menage?.arrondissement)
 
         // Fetch housing data
         const logement = await getLogementByMenageId(id);

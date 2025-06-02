@@ -1,7 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { Users } from '../types/database';
 
-const API_BASE = "http://172.233.248.5:5000/"
+const API_BASE = import.meta.env.VITE_API_URL;
+
 
 interface AuthContextType {
   user: Users | null;
@@ -32,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}api/getCurrentUser`, {
+      const res = await fetch(`${API_BASE}/getCurrentUser`, {
         credentials: 'include',
       });
       if (!res.ok) throw new Error('Non authentifié');
@@ -53,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}api/login`, {
+      const res = await fetch(`${API_BASE}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Important pour cookies
@@ -80,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${API_BASE}api/register`, {
+      const res = await fetch(`${API_BASE}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -104,7 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await fetch(`${API_BASE}api/logout`, {
+    await fetch(`${API_BASE}/logout`, {
       method: 'POST',
       credentials: 'include',
     });
@@ -117,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setResetSuccess(false);
     
     try {
-      const res = await fetch(`${API_BASE}api/forgot_password`, {
+      const res = await fetch(`${API_BASE}/forgot_password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
          credentials: 'omit',
@@ -146,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setResetSuccess(false);
     
     try {
-      const res = await fetch(`${API_BASE}api/reset_password`, {
+      const res = await fetch(`${API_BASE}/reset_password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'omit',

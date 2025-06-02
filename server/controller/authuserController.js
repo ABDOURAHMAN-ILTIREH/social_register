@@ -73,7 +73,7 @@ const login = async (req,res) =>{
       res.cookie('token', token, {
         httpOnly: true,
         secure: false, // mettre true en production (HTTPS)
-         sameSite: 'lax',
+        sameSite: 'lax',
         maxAge: 3600000 // 1 heure
       });
         

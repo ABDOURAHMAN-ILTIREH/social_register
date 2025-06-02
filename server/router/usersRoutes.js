@@ -15,6 +15,7 @@ router.get('/getCurrentUser', userController.getCurrentUser);
 
 router.use(authorizeAdmin);
 router.get('/users', userController.getAllUsers);
+
 // Routes pour les utilisateurs
 router.post('/users', userController.createUser);
 router.get('/users/:id', userController.getUserById);
