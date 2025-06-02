@@ -12,6 +12,7 @@ exports.createLogement = async (req, res) => {
       return res.status(404).json({ message: 'Ménage non trouvé' });
     }
 
+    
     const logement = await Logement.create({ ...logementData, menage_id });
     res.status(201).json(logement);
   } catch (error) {

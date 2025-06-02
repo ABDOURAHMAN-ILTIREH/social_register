@@ -5,12 +5,15 @@ const { Personne } = require('../models');
 exports.createPersonne = async (req, res) => {
   try {
     const {
-      menage_id,...addPersonnes
+      menage_id,nom_prenoms,...addPersonnes
       
     } = req.body;
 
+   
+
     const personne = await Personne.create({
       ...addPersonnes,
+      nom_prenoms: nom_prenoms ? nom_prenoms.toLowerCase() : nom_prenoms,
       menage_id
     });
 
@@ -47,12 +50,17 @@ exports.getPersonneById = async (req, res) => {
 
 // Mettre à jour une personne
 exports.updatePersonne = async (req, res) => {
+  const {nom_prenoms,...personneData} = req.body;
   try {
     const personne = await Personne.findByPk(req.params.id);
     if (!personne) {
       return res.status(404).json({ message: 'Personne non trouvée' });
     }
-    await personne.update(req.body);
+    
+    await personne.update({
+      ...personneData,
+      nom_prenoms: nom_prenoms ? nom_prenoms.toLowerCase() : nom_prenoms,
+    });
     res.status(200).json(personne);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la mise à jour de la personne', error });

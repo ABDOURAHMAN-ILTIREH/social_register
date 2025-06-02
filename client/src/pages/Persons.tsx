@@ -7,7 +7,7 @@ import {
   Filter, X, Loader2
 } from 'lucide-react';
 
-
+const API_BASE = "http://172.233.248.5:5000/"
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25, 50];
 
@@ -71,7 +71,7 @@ const Persons: React.FC = () => {
       if (value !== '') params.append(key, value);
     });
 
-    const response = await fetch(`http://localhost:5000/api/personnesQuery?${params.toString()}`, {
+    const response = await fetch(`${API_BASE}personnesQuery?${params.toString()}`, {
       method: 'GET',
       credentials: 'include',
       headers: {

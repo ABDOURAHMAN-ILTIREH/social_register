@@ -88,7 +88,11 @@ exports.updateUser = async (req, res) => {
     }
 
     // 4. Mettre à jour le mot de passe
-    await User.update({ name, email, role }, { where: { id: req.params.id } });
+    await User.update({ 
+      name: name ? name.toLowerCase() : name, 
+      email:email ? email.toLowerCase():email, 
+      role 
+       }, { where: { id: req.params.id } });
   
     return res.json({ message: "mis à jour avec succès" });
 

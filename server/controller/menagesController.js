@@ -13,6 +13,7 @@ exports.createMenage = async (req, res) => {
       return res.status(400).json({ message: 'Certains champs obligatoires sont manquants.' });
     }
 
+
     const menage = await Menage.create({
       ...menageDate,
       enqueteur_id

@@ -1,6 +1,6 @@
 // utils/api.ts
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "http://172.233.248.5:5000/api";
 
 interface ApiConfig extends Omit<RequestInit, 'body'> {
   headers?: Record<string, string>;

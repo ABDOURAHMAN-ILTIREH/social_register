@@ -25,7 +25,11 @@ const register = async (req, res) => {
     const hashPassword = hash(password);
 
     // Créer un nouvel utilisateur
-    const newUser = await User.create({ name, email, password: hashPassword });
+    const newUser = await User.create({ 
+      name: name ? name.toLowerCase() : name, 
+      email:email ? email.toLowerCase():email, 
+      password: hashPassword 
+    });
 
     // Générer un token JWT
     create_Token(newUser.id); // Remplacez 'votre_secret_jwt' par une clé secrète sécurisée

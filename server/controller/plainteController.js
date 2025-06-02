@@ -4,15 +4,20 @@ const { Plainte } = require('../models');
 // Créer une plainte
 exports.createPlainte = async (req, res) => {
   try {
-    const { menage_id, ...plainteData } = req.body;
+    const { menage_id,description_plainte, ...plainteData } = req.body;
 
     // Vérifier si le ménage existe
     const menage = await Menage.findByPk(menage_id);
     if (!menage) {
       return res.status(404).json({ message: 'Ménage non trouvé' });
     }
+  
+    const plainte = await Plainte.create({ 
+      ...plainteData,
+       description_plainte: description_plainte ? description_plainte.toLowerCase() : description_plainte,
+       menage_id
+     });
 
-    const plainte = await Plainte.create({ ...plainteData, menage_id });
     res.status(201).json(plainte);
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la création de la plainte', error });
@@ -31,12 +36,19 @@ exports.getAllPlaintes = async (req, res) => {
 
 // Récupérer une plainte par ID
 exports.getPlainteById = async (req, res) => {
+   const { description_plainte, ...plainteData } = req.body;
   try {
     const plainte = await Plainte.findByPk(req.params.id);
+
     if (!plainte) {
       return res.status(404).json({ message: 'Plainte non trouvée' });
     }
-    res.status(200).json(plainte);
+
+    res.status(200).json({
+      ...plainteData,
+       description_plainte: description_plainte ? description_plainte.toLowerCase() : description_plainte,
+    });
+    
   } catch (error) {
     res.status(500).json({ message: 'Erreur lors de la récupération de la plainte', error });
   }
